@@ -1,11 +1,18 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import * as React from "react";
+import axios from "axios";
 
 export default function Home() {
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(1);
+  const [person, setPerson] = React.useState(null);
 
-  const handleSearch = function () {};
+  const handleSearch = async function () {
+    let person = await axios.get(`/api/people/${value}`);
+    console.log("Person", person);
+
+    setPerson(person.data);
+  };
 
   return (
     <div className={styles.container}>
@@ -31,7 +38,17 @@ export default function Home() {
         <button type="submit" onClick={() => handleSearch()}>
           Search
         </button>
-        <p></p>
+        <span>
+          <pre>
+            {person && (
+              <div>
+                <p>Name: {person.name}</p>
+                <p>Height: {person.height}</p>
+                <p>Mass: {person.mass}</p>
+              </div>
+            )}
+          </pre>
+        </span>
       </main>
 
       <footer className={styles.footer}></footer>
